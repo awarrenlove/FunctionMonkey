@@ -84,19 +84,11 @@ namespace {{Namespace}}
             {{/if}}
 
             {{CommandTypeName}} command;
-            string contentType = req.ContentType.ToLower();
-            if (contentType=="application/json")
+            string requestBody = new StreamReader(req.Body).ReadToEnd();
+            
+            if (!System.String.IsNullOrWhiteSpace(requestBody))
             {
-                string requestBody = new StreamReader(req.Body).ReadToEnd();
-                
-                if (!System.String.IsNullOrWhiteSpace(requestBody))
-                {
-                    command = serializer.Deserialize<{{CommandTypeName}}>(requestBody);
-                }
-                else
-                {
-                    command = new {{CommandTypeName}}();
-                }
+                command = serializer.Deserialize<{{CommandTypeName}}>(requestBody);
             }
             else
             {
